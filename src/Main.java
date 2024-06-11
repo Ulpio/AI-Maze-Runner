@@ -1,39 +1,50 @@
+import java.util.Arrays;
 import java.util.LinkedList; // Importa a classe LinkedList
 import java.util.Queue; // Importa a classe Queue
+import java.util.Scanner;
 
 public class Main{
     private static final int[] movimentos_linha = {-1,1,0,0}; // Vetor de movimentos possíveis para a linha
     private static final int[] movimentos_coluna ={0,0,-1,1}; // Vetor de movimentos possíveis para a coluna
+    private static boolean debug = false; // Variável para debug
 
     public static void main(String[] args) {
         // Crie uma lista de labirintos com soluções diferentes e possíveis
         char[][][] labirintos ={
                 {
-                        {'S', '0', 'X', '0', 'E'},
+                        {'S', '0', 'X', '0', 'X'},
                         {'X', '0', 'X', '0', 'X'},
                         {'0', '0', '0', '0', '0'},
                         {'0', 'X', 'X', 'X', '0'},
-                        {'0', '0', '0', 'X', '0'}
+                        {'0', '0', '0', 'X', 'E'}
                 },
                 {
                         {'S', '0', '0', 'X', '0'},
                         {'X', 'X', '0', 'X', '0'},
                         {'0', '0', '0', '0', '0'},
                         {'0', 'X', 'X', 'X', '0'},
+                        {'0', '0', '0', 'X', '0'},
                         {'0', '0', '0', '0', 'E'}
                 },
                 {
-                        {'S', 'X', '0', '0', '0'},
-                        {'0', 'X', '0', 'X', '0'},
+                        {'S', '0', '0', '0', '0'},
+                        {'X', 'X', '0', 'X', '0'},
                         {'0', '0', '0', 'X', '0'},
-                        {'0', 'X', 'X', '0', 'E'},
+                        {'0', 'X', 'X', 'E', 'X'},
                         {'0', '0', '0', '0', '0'}
                 },
-                {       {'S', '0', '0', '0', '0'},
+                {       {'S', 'X', '0', '0', '0'},
+                        {'0', 'X', 'X', 'X', '0'},
+                        {'0', '0', '0', '0', '0'},
+                        {'0', 'X', '0', 'X', '0'},
+                        {'X', '0', '0', 'X', 'E'}
+                },
+                {
+                        {'S', '0', 'X', '0', '0'},
                         {'0', 'X', 'X', 'X', '0'},
                         {'0', '0', '0', '0', '0'},
                         {'0', 'X', 'X', 'X', '0'},
-                        {'0', '0', '0', '0', 'E'}
+                        {'0', '0', 'X', '0', 'E'}
                 },
                 {
                         {'S', '0', '0', '0', '0'},
@@ -43,43 +54,44 @@ public class Main{
                         {'0', '0', '0', '0', 'E'}
                 },
                 {
-                        {'S', '0', '0', '0', '0'},
-                        {'0', 'X', 'X', 'X', '0'},
-                        {'0', '0', '0', '0', '0'},
-                        {'0', 'X', 'X', 'X', '0'},
-                        {'0', '0', '0', '0', 'E'}
+                    // labirinto de 8x8
+                    {'S', '0', '0', '0', '0', '0', '0', '0'},
+                    {'0', 'X', 'X', 'X', 'X', 'X', 'X', '0'},
+                    {'0', 'X', '0', '0', '0', '0', '0', '0'},
+                    {'0', 'X', '0', 'X', 'X', 'X', 'X', '0'},
+                    {'0', 'X', '0', 'X', '0', '0', '0', '0'},
+                    {'0', 'X', '0', 'X', '0', 'X', 'X', '0'},
+                    {'0', 'X', '0', 'X', '0', '0', 'X', '0'},
+                    {'0', 'X', '0', 'X', 'X', '0', 'E', '0'}
                 },
                 {
-                        {'S', '0', '0', '0', '0'},
-                        {'0', 'X', 'X', 'X', '0'},
-                        {'0', '0', '0', '0', '0'},
-                        {'0', 'X', 'X', 'X', '0'},
-                        {'0', '0', '0', '0', 'E'}
+                    //Labirinto de 10x10
+                    {'S', '0', '0', '0', '0', '0', '0', '0', '0', 'X'},
+                    {'0', 'X', 'X', 'X', 'X', 'X', 'X', '0', 'X', '0'},
+                    {'0', 'X', '0', '0', '0', '0', '0', '0', 'X', '0'},
+                    {'0', 'X', '0', 'X', 'X', 'X', 'X', 'X', 'X', '0'},
+                    {'0', 'X', '0', 'X', '0', '0', 'X', '0', '0', '0'},
+                    {'0', 'X', '0', 'X', 'X', 'X', 'X', '0', 'X', '0'},
+                    {'0', 'X', '0', '0', '0', '0', '0', '0', 'X', '0'},
+                    {'0', 'X', '0', 'X', 'X', 'X', 'X', 'X', 'X', '0'},
+                    {'0', 'X', '0', '0', '0', '0', 'X', '0', '0', '0'},
+                    {'0', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'E'}
                 },
-                {
-                        {'S', '0', '0', '0', '0'},
-                        {'0', 'X', 'X', 'X', '0'},
-                        {'0', '0', '0', '0', '0'},
-                        {'0', 'X', 'X', 'X', '0'},
-                        {'0', '0', '0', '0', 'E'}
-                },
-                {
-                        {'S', '0', '0', '0', '0'},
-                        {'0', 'X', 'X', 'X', '0'},
-                        {'0', '0', '0', '0', '0'},
-                        {'0', 'X', 'X', 'X', '0'},
-                        {'0', '0', '0', '0', 'E'}
-                }
-
         };
         Ponto inicio = new Ponto(0,0,null); // Criação do ponto de início
+        Scanner sc = new Scanner(System.in); // Criação de um objeto Scanner
+        System.out.println("Deseja ver o debug? (s/n)"); // Pergunta se deseja ver o debug
+        String resposta = sc.nextLine(); // Lê a resposta
+        // Se a resposta for "n", o debug é desativado
+        debug = resposta.equals("s"); // Se a resposta for "s", o debug é ativado
         // Para cada labirinto, encontre o caminho mais curto
-        for (char[][] labirinto : labirintos) {
-            System.out.println("Labirinto:");
-            imprimirLabirinto(labirinto);
-            if (encontrarCaminhoMaisCurto(labirinto, inicio, false)) {
+        for (int i = 0; i < labirintos.length; i++) {
+            // Numerar os labirintos ao imprimir
+            System.out.println("Labirinto:"+ (i+1));
+            imprimirLabirinto(labirintos[i]);
+            if (encontrarCaminhoMaisCurto(labirintos[i], inicio, debug)) {
                 System.out.println("Caminho encontrado:");
-                imprimirLabirinto(labirinto);
+                imprimirLabirinto(labirintos[i]);
             } else {
                 System.out.println("Caminho não encontrado.");
             }
@@ -91,7 +103,6 @@ public class Main{
         Queue<Ponto> fila = new LinkedList<>(); // Criação de uma fila para armazenar os pontos a serem visitados
         fila.add(inicio); // Adiciona o ponto inicial à fila
         visitado[inicio.x][inicio.y] = true; // Marca o ponto inicial como visitado
-
         while(!fila.isEmpty()){
             Ponto atual = fila.poll();
             if (debug) System.out.println("Visitando o ponto: ("+atual.x+","+atual.y+")");
@@ -108,9 +119,9 @@ public class Main{
                 if (movimentoValido(labirinto, novaLinha, novaColuna, visitado)) {
                     visitado[novaLinha][novaColuna] = true;
                     fila.add(new Ponto(novaLinha, novaColuna, atual));
-                    System.out.println("Adicionando ponto à fila: (" + novaLinha + ", " + novaColuna + ")");
+                    if (debug) System.out.println("Adicionando ponto à fila: (" + novaLinha + ", " + novaColuna + ")");
                 } else {
-                    System.out.println("Movimento inválido: (" + novaLinha + ", " + novaColuna + ")");
+                    if (debug) System.out.println("Movimento inválido: (" + novaLinha + ", " + novaColuna + ")");
                 }
             }
         }
@@ -118,7 +129,7 @@ public class Main{
     }
 
     private static boolean movimentoValido(char[][] labirinto, int linha, int coluna, boolean[][] visitado) {
-        return linha >= 0 && linha < labirinto.length && coluna >= 0 && coluna < labirinto[0].length && labirinto[linha][coluna] != '1' && !visitado[linha][coluna];
+        return linha >= 0 && linha < labirinto.length && coluna >= 0 && coluna < labirinto[0].length && labirinto[linha][coluna] != 'X' && !visitado[linha][coluna];
     }
 
     private static void marcarCaminho(char[][] labirinto, Ponto fim) {
