@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
-
 public class Main {
     private static final int[] movimentos_linha = {-1, 1, 0, 0};
     private static final int[] movimentos_coluna = {0, 0, -1, 1};
@@ -84,10 +83,10 @@ public class Main {
         };
 
         Ponto inicio = new Ponto(0, 0, null);
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Deseja ver o debug? (s/n)");
-        String resposta = sc.nextLine();
-        debug = resposta.equals("s");
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("Deseja ver o debug? (s/n)");
+//        String resposta = sc.nextLine();
+//        debug = resposta.equals("s");
 
         // Inicializar a interface gráfica
         SwingUtilities.invokeLater(() -> createAndShowGUI(inicio));
@@ -96,14 +95,33 @@ public class Main {
     private static void createAndShowGUI(Ponto inicio) {
         JFrame frame = new JFrame("Labirinto");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 600);
+        frame.setSize(400, 400);
         frame.setLayout(new BorderLayout());
 
         mazePanel = new MazePanel(labirintos[currentMazeIndex]);
         frame.add(mazePanel, BorderLayout.CENTER);
 
+        JPanel buttonPanel = new JPanel();
+        JButton previousButton = new JButton("Labirinto Anterior");
         JButton nextButton = new JButton("Próximo Labirinto");
-        JButton prevButton = new JButton("Labirinto Anterior");
+
+        previousButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (currentMazeIndex > 0) {
+                    currentMazeIndex--;
+                    mazePanel.setLabirinto(labirintos[currentMazeIndex]);
+                    if (encontrarCaminhoMaisCurto(labirintos[currentMazeIndex], inicio, debug)) {
+                        mazePanel.repaint();
+                    } else {
+                        System.out.println("Caminho não encontrado.");
+                    }
+                } else {
+                    System.out.println("Você está no primeiro labirinto.");
+                }
+            }
+        });
+
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -120,24 +138,10 @@ public class Main {
                 }
             }
         });
-        prevButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (currentMazeIndex > 0) {
-                    currentMazeIndex--;
-                    mazePanel.setLabirinto(labirintos[currentMazeIndex]);
-                    if (encontrarCaminhoMaisCurto(labirintos[currentMazeIndex], inicio, debug)) {
-                        mazePanel.repaint();
-                    } else {
-                        System.out.println("Caminho não encontrado.");
-                    }
-                } else {
-                    System.out.println("Você está no primeiro labirinto.");
-                }
-            }
-        });
-        frame.add(nextButton, BorderLayout.SOUTH);
-        frame.add(prevButton, BorderLayout.NORTH);
+
+        buttonPanel.add(previousButton);
+        buttonPanel.add(nextButton);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
 
         frame.setVisible(true);
 
@@ -193,4 +197,3 @@ public class Main {
         }
     }
 }
-

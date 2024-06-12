@@ -7,10 +7,13 @@ class MazePanel extends JPanel {
 
     public MazePanel(char[][] labirinto) {
         this.labirinto = labirinto;
+        this.setPreferredSize(new Dimension(labirinto[0].length * CELL_SIZE, labirinto.length * CELL_SIZE));
     }
 
     public void setLabirinto(char[][] labirinto) {
         this.labirinto = labirinto;
+        this.setPreferredSize(new Dimension(labirinto[0].length * CELL_SIZE, labirinto.length * CELL_SIZE));
+        revalidate();
         repaint();
     }
 
